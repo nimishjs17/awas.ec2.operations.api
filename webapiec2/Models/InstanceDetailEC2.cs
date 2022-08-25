@@ -10,6 +10,8 @@ namespace webapiec2.Models
         [JsonProperty("_isntanceName")]
         public string _isntanceName { get; set; }
 
+        public string _ipAddress { get; set; }
+
         [JsonProperty("_code")]
         public int? _code { get; set; }
 

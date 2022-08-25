@@ -55,7 +55,7 @@ namespace webapiec2.Controllers
         }
 
         [HttpPost("start-by-id")]
-        public async Task<IActionResult> StartInstanceById(StartInstanceByIdRequest request)
+        public async Task<IActionResult> StartInstanceById(OperationDetails request)
         {
             var _EC2Response = new EC2Response();
             try
@@ -98,7 +98,8 @@ namespace webapiec2.Controllers
                         });
                     });
                 }
-                return Ok(instanceDetailEC2);
+                _EC2Response.Response = instanceDetailEC2;
+                return Ok(_EC2Response);
             }
             catch (Exception ex)
             {
@@ -128,7 +129,8 @@ namespace webapiec2.Controllers
                                 _code = instance.State.Code,
                                 _instanceId = instance.InstanceId,
                                 _state = instance.State.Name,
-                                _isntanceName = instance.KeyName
+                                _isntanceName = instance.KeyName,
+                                _ipAddress = instance.PublicIpAddress
                             });
                     }
                 }
@@ -137,7 +139,7 @@ namespace webapiec2.Controllers
         }
 
         [HttpPost("stop-by-id")]
-        public async Task<IActionResult> StopInstanceById(StartInstanceByIdRequest request)
+        public async Task<IActionResult> StopInstanceById(OperationDetails request)
         {
             var _EC2Response = new EC2Response();
             try
@@ -180,7 +182,8 @@ namespace webapiec2.Controllers
                         });
                     });
                 }
-                return Ok(instanceDetailEC2);
+                _EC2Response.Response = instanceDetailEC2;
+                return Ok(_EC2Response);
             }
             catch (Exception ex)
             {
