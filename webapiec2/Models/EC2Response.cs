@@ -12,7 +12,7 @@ namespace webapiec2.Models
         public string ErrorMessage { get; set; } = null;
 
         [JsonProperty("response")]
-        public dynamic Response { get; set; }
+        public dynamic Response { get; set; } = null;
 
         //[JsonProperty("innnerException")]
        // public Exception InnnerException { get; set; } = null;
