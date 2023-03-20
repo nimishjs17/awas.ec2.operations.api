@@ -10,18 +10,19 @@ using Amazon.Runtime;
 using webapiec2.Models;
 using Microsoft.AspNetCore.Http;
 
+using System.Text.Json;
 namespace webapiec2.Controllers
 {
     [ApiController]
     [Route("/api/core/ec-2")]
     public class EC2Controller : ControllerBase
     {
-        private static string accessKeyID = "XXXX";
-        private static string secretKey = "XXXXXX+fh";
+        private static string accessKeyID = "AKIASDB4SZXKD3JEUYXP";
+        private static string secretKey = "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";
         private static string unauthorizedMsg = "Invalid Token, Please Try Again";
         public EC2Controller()
         {
-           
+
         }
 
         [HttpPost("list-all-servers")]
@@ -37,7 +38,7 @@ namespace webapiec2.Controllers
                     return StatusCode(StatusCodes.Status401Unauthorized, _EC2Response);
                 }
                 var credentials = new BasicAWSCredentials(accessKeyID, secretKey);
-                var eC2Client = new AmazonEC2Client(credentials, Amazon.RegionEndpoint.USEast1);
+                var eC2Client = new AmazonEC2Client(credentials, Amazon.RegionEndpoint.APSouth1);
 
                 var result = await GetInstanceDescriptions(eC2Client);
                 _EC2Response.Response = result;
@@ -74,7 +75,7 @@ namespace webapiec2.Controllers
                 }
 
                 var credentials = new BasicAWSCredentials(accessKeyID, secretKey);
-                var eC2Client = new AmazonEC2Client(credentials, Amazon.RegionEndpoint.USEast1);
+                var eC2Client = new AmazonEC2Client(credentials, Amazon.RegionEndpoint.APSouth1);
 
                 var _startInstancesRequest = new StartInstancesRequest
                 {
@@ -129,7 +130,7 @@ namespace webapiec2.Controllers
                                 _code = instance.State.Code,
                                 _instanceId = instance.InstanceId,
                                 _state = instance.State.Name,
-                                _isntanceName = instance.KeyName,
+                                _isntanceName = instance.Tags.FirstOrDefault(x => x.Key == "Name").Value,
                                 _ipAddress = instance.PublicIpAddress
                             });
                     }
@@ -158,7 +159,7 @@ namespace webapiec2.Controllers
                 }
 
                 var credentials = new BasicAWSCredentials(accessKeyID, secretKey);
-                var eC2Client = new AmazonEC2Client(credentials, Amazon.RegionEndpoint.USEast1);
+                var eC2Client = new AmazonEC2Client(credentials, Amazon.RegionEndpoint.APSouth1);
 
                 var _stopInstancesRequest = new StopInstancesRequest
                 {
@@ -193,6 +194,15 @@ namespace webapiec2.Controllers
 
                 return StatusCode(StatusCodes.Status500InternalServerError, _EC2Response);
             }
+        }
+
+        [HttpPost("contactus")]
+        public JObject ContactUs(string firstName)
+        {
+            //store data to database
+            JObject js = new JObject();
+            js.Add("FirstName", firstName);
+            return js;
         }
 
     }
